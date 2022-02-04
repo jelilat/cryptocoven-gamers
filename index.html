@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <title>Crypto Coven Game</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+        <!--<script src="//cdn.jsdelivr.net/npm/faunadb@latest/dist/faunadb-min.js"></script>-->
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <script type="module" src="./main.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-8">
+                </div>
+                <div class="col-sm-2">
+                    <button id="connect-wallet">Connect wallet</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="jumbotron" style="text-align:center;">
+                        <h2>Welcome to the Coven!</h2>
+                        <p>A witch is lost in the wilderness. Only you can help her find her way back. Anyone can summon a witch, but only those who say her name can take her home.</p>
+                        <button id="summon">Summon a Witch</button>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!--<li class="card">
+                <i class="fa fa-paper-plane-o"></i>
+            </li>
+            <li class="card match">
+                <i class="fa fa-anchor"></i>
+            </li>
+            <li class="card">
+                <i class="fa fa-bolt"></i>
+            </li>
+            <li class="card">
+                <i class="fa fa-cube"></i>
+            </li>
+            <li class="card match">
+                <i class="fa fa-anchor"></i>
+            </li>
+            <li class="card">
+                <i class="fa fa-leaf"></i>
+            </li>
+            <li class="card">
+                <i class="fa fa-bicycle"></i>
+            </li>
+            <li class="card">
+                <i class="fa fa-diamond"></i>
+            </li>-->
+            </ul>
+
+            <ul id="myUL">
+            </ul>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+            <!-- <div class="row">
+                <div class="container">
+                    <p class="witch-description"></p>
+                    <input type="text" class="witch-name" placeholder="Witch Name">
+                    <p><button class="witch-submit">Submit</button></p>
+                </div>
+                <div id="leaderboard" class="table-wrapper">
+                </div>
+            </div> -->
+            <script>
+                $(document).ready(function() {
+                    $('.card').hide();
+                    $('#home').hide();
+                    $('#summon').click(function() {
+                        $('.card').show();
+                        $('#summon').hide();
+                        $('#home').show();
+                    });
+                });
+                </script>
+            
+            <div id="container">
+                <div id="game">
+                    <div id="board-container">
+
+                    <ul class="deck">
+                        <li class="card">
+                            <img src="https://lh3.googleusercontent.com/42CLQmY1Z-0A11TDhu7cHn5UxPhMTA2k_tFCI-kKNQovR41Uh1EsfHpb37UXcVzkD1EHSZMvF05k3rfvQCx038JXQQFKcIieImmDwQ=s0" alt="Witch">
+                        </li>
+                    </ul>
+                </div>
+                <div style="text-align:center;">
+                    <h2 id="home">Take her home!</h2>
+                </div>
+                  <div id="board-container">
+                    <div id="board"></div>
+                  </div>
+          
+                  <div id="keyboard-container">
+                    <div class="keyboard-row">
+                      <button data-key="q">q</button>
+                      <button data-key="w">w</button>
+                      <button data-key="e">e</button>
+                      <button data-key="r">r</button>
+                      <button data-key="t">t</button>
+                      <button data-key="y">y</button>
+                      <button data-key="u">u</button>
+                      <button data-key="i">i</button>
+                      <button data-key="o">o</button>
+                      <button data-key="p">p</button>
+                    </div>
+                    <div class="keyboard-row">
+                      <div class="spacer-half"></div>
+                      <button data-key="a">a</button>
+                      <button data-key="s">s</button>
+                      <button data-key="d">d</button>
+                      <button data-key="f">f</button>
+                      <button data-key="g">g</button>
+                      <button data-key="h">h</button>
+                      <button data-key="j">j</button>
+                      <button data-key="k">k</button>
+                      <button data-key="l">l</button>
+                      <div class="spacer-half"></div>
+                    </div>
+                    <div class="keyboard-row">
+                      <button data-key="enter" class="wide-button">Enter</button>
+                      <button data-key="z">z</button>
+                      <button data-key="x">x</button>
+                      <button data-key="c">c</button>
+                      <button data-key="v">v</button>
+                      <button data-key="b">b</button>
+                      <button data-key="n">n</button>
+                      <button data-key="m">m</button>
+                      <button data-key="del" class="wide-button">Del</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+        </div>
+    </body>
