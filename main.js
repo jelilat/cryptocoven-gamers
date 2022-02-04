@@ -183,7 +183,7 @@ createSquares();
   function handleSubmitWord() {
     const currentWordArr = getCurrentWordArr();
     if (currentWordArr.length !== 8) {
-      window.alert("Word must be 5 letters");
+      window.alert("Word must be 8 letters");
     }
 
     const currentWord = currentWordArr.join("");
@@ -220,7 +220,7 @@ createSquares();
         }
 
         if (guessedWords.length === 5) {
-        //   window.alert(`Sorry, you have no more guesses! The word is ${word}.`);
+          window.alert(`Sorry, you failed to bring her home. Try again!`);
         }
 
         guessedWords.push([]);
