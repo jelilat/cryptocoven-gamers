@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let qualities;
     let tries;
     let name;
+    let image;
     const serverUrl = "https://svrc1oyzr9kk.usemoralis.com:2053/server";
     const appId = "rcOxkXrAg18ef8kakZKx7fwXtrUPJhjtDdVoP0s0";
     Moralis.start({ serverUrl, appId });
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
       
     document.getElementById("connect-wallet").onclick = login;
     //   document.getElementById("btn-logout").onclick = logOut;
-    document.getElementById("summon").onclick = shuffle
+    // document.getElementById("summon").onclick = witchDetails;
 
     $('.stack').click(function() {
   
@@ -54,95 +55,51 @@ document.addEventListener("DOMContentLoaded", () => {
         
       });
 
-      /*
- * Create a list that holds all of your cards
- */
+    function chooseWitch() {
+    let number = Math.floor(Math.random() * (9757)) + 1;
+    return number;
+    }
 
+  async function witchDetails() {
+    let witch = await chooseWitch();
+    let response = await fetch(`https://api.opensea.io/api/v1/asset/0x5180db8f5c931aae63c74266b211f580155ecac8/${witch}`, 
+        {
+            method: 'GET',
+        })
+        // .then(response => console.log(response.json()))
+    qualities = await response.json();
+    
+    image = qualities["image_url"];
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
-
-function shuffle(myCard) {
-  var currentIndex = array.length,
-    temporaryValue, randomIndex;
-
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    let image_card = await document.getElementById("image-card")
+    image_card.src = image;
+    let fullname = qualities["name"];
+    let nameList = fullname.split(" ");
+    if (nameList[0] == "the") {
+        name = nameList[1].replace(",", "");
+    } else {
+        name = nameList[0].replace(",", "")
+    }
+    
+    let board = document.getElementById("board");
+    board.style.setProperty('grid-template-columns', 'repeat(' + name.length + ', 1fr)');
+    createSquares(name);
+    return name;
   }
+witchDetails();
 
-  return myCard;
-}
-/* Register the .deck to the click event */
-// Note: the second parameter .card
-$('.deck').on('click', '.card', handler)
-
-/* The handler "knows" that any .card is e.target and this */
-// toggleClass the .open and .show classes
-function handler(event) {
-  $(this).toggleClass('open show');
-};
-
-/*$(document).ready(function() {
-    $("li").click(function(event) {
-      $target = $(event.target);
-      $target.toggleClass("card");
-    });
-  });
-
-
-
-/*
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-
-createSquares();
 //   getNewWord();
 
   let guessedWords = [[]];
   let availableSpace = 1;
 
-  let word = "tamarind";
+  let word;
   let guessedWordCount = 0;
 
   const keys = document.querySelectorAll(".keyboard-row button");
 
   function getNewWord() {
-    fetch(
-      `https://wordsapiv1.p.rapidapi.com/words/?random=true&lettersMin=5&lettersMax=5`,
-      {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "wordsapiv1.p.rapidapi.com",
-          "x-rapidapi-key": "<YOUR_KEY_GOES_HERE>",
-        },
-      }
-    )
-      .then((response) => {
-        return response.json();
-      })
-      .then((res) => {
-        word = res.word;
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    word = witchDetails();
   }
 
   function getCurrentWordArr() {
@@ -182,8 +139,8 @@ createSquares();
 
   function handleSubmitWord() {
     const currentWordArr = getCurrentWordArr();
-    if (currentWordArr.length !== 8) {
-      window.alert("Word must be 8 letters");
+    if (currentWordArr.length !== word.length) {
+      window.alert(`Word must be ${word.length} letters`);
     }
 
     const currentWord = currentWordArr.join("");
@@ -200,7 +157,7 @@ createSquares();
     //       throw Error();
     //     }
 
-        const firstLetterId = guessedWordCount * 8 + 1;
+        const firstLetterId = guessedWordCount * word.length + 1;
         const interval = 200;
         currentWordArr.forEach((letter, index) => {
           setTimeout(() => {
@@ -230,10 +187,11 @@ createSquares();
     //   });
   }
 
-  function createSquares() {
+  function createSquares(name) {
     const gameBoard = document.getElementById("board");
-
-    for (let index = 0; index < 40; index++) {
+    let cap = +name.length * 5
+    console.log(cap)
+    for (let index = 0; index < cap; index++) {
       let square = document.createElement("div");
       square.classList.add("square");
       square.classList.add("animate__animated");
