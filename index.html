@@ -22,7 +22,7 @@
         <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
         <!--<script src="//cdn.jsdelivr.net/npm/faunadb@latest/dist/faunadb-min.js"></script>-->
         <link rel="stylesheet" href="/stylesheets/style.css">
-        <script type="module" src="./main.js"></script>
+        <script type="module" src="./scripts/app.js"></script>
     </head>
     <body>
         <div class="container-fluid">
@@ -32,7 +32,7 @@
                 <div class="col-sm-8">
                 </div>
                 <div class="col-sm-2">
-                    <button id="connect-wallet">Log in</button>
+                    <button id="connect-wallet">Connect Wallet</button>
                 </div>
             </div>
             <div class="row">
@@ -63,18 +63,20 @@
                 </div>
                 <div id="leaderboard" class="table-wrapper">
                 </div>
-            </div> -->
+            </div> 
             <script>
                 $(document).ready(function() {
-                    $('#cards').hide();
+                    $('#cards').show();
                     $('#home').hide();
+                    $'#board-container').hide();
                     $('#summon').click(async function() {
                         $('.card').show();
                         $('#summon').hide();
                         $('#home').show();
+                        $('#board-container').show();
                     });
                 });
-                </script>
+                </script>-->
             
             <div id="container">
                 <div id="game">
@@ -133,6 +135,13 @@
                   </div>
                 </div>
               </div>
-
+            <div>
+                <h2 style="text-align:center;">
+                    Leaderboard
+                </h2>
+                <div id="projectTable" class="table-wrapper">
+                    
+                </div>
+            </div>
         </div>
     </body>
