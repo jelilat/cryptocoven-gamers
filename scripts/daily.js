@@ -1,6 +1,8 @@
 module.exports.currentStat = async () => {
     let guessed = localStorage.getItem("guessed");
     let witch = localStorage.getItem("witch");
+
+    createSquares(witch);
     let image = localStorage.getItem("image");
 
     let image_card = document.getElementById("image-card")
@@ -10,7 +12,6 @@ module.exports.currentStat = async () => {
     document.getElementById("result").innerHTML = result;
     let status = localStorage.getItem('status');
     document.getElementById("m-title").value = status;
-    createSquares(witch);
 
     guessed = guessed.split(",");
 

@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateGuessedWords(letter) {
     const currentWordArr = getCurrentWordArr();
 
-    if (currentWordArr && currentWordArr.length < 8) {
+    if (currentWordArr && currentWordArr.length < name.length + 1) {
       currentWordArr.push(letter);
 
       const availableSpaceEl = document.getElementById(String(availableSpace));

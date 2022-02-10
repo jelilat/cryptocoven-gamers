@@ -84728,6 +84728,8 @@ module.exports.getTokenBalance = async (useraddress, contractaddress) => {
 module.exports.currentStat = async () => {
     let guessed = localStorage.getItem("guessed");
     let witch = localStorage.getItem("witch");
+
+    createSquares(witch);
     let image = localStorage.getItem("image");
 
     let image_card = document.getElementById("image-card")
@@ -84737,10 +84739,8 @@ module.exports.currentStat = async () => {
     document.getElementById("result").innerHTML = result;
     let status = localStorage.getItem('status');
     document.getElementById("m-title").value = status;
-    createSquares(witch);
 
     guessed = guessed.split(",");
-    console.log(guessed)
 
     const interval = 200;
 
@@ -85053,7 +85053,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateGuessedWords(letter) {
     const currentWordArr = getCurrentWordArr();
 
-    if (currentWordArr && currentWordArr.length < 8) {
+    if (currentWordArr && currentWordArr.length < name.length + 1) {
       currentWordArr.push(letter);
 
       const availableSpaceEl = document.getElementById(String(availableSpace));
