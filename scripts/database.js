@@ -10,7 +10,7 @@ async function addToLeaderboard(id, url, name, score) {
   // //var faunadb = (window as any).faunadb;
   var q = faunadb.query
       const response = await client.query(
-          q.Create(q.collection("leaderboard"), {
+          q.Create(q.Collection("leaderboard"), {
                 data: {
                     tokenId: id,
                     pfp_url: url,
@@ -67,7 +67,7 @@ async function updateLeaderboard(id, newScore) {
     averageScore = ((score * games_played) + newScore) / (games_played + 1)
     const response = client.query(
         q.Update(
-            q.Ref(q.collection('leaderboard'), id),
+            q.Ref(q.Collection('leaderboard'), id),
             {
                 data: {
                     score: averageScore,

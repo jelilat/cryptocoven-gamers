@@ -212,6 +212,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
           document.getElementById("show-modal").click();
+          sessionStorage.removeItem('witch');
+          sessionStorage.removeItem('image');
         } else if (guessedWords.length === 5) {
           let preResult = "witchle " + guessedWordCount +"/5 <br>";
 
@@ -230,6 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("witch", name)
 
           document.getElementById("show-modal").click();
+          sessionStorage.removeItem('witch');
+          sessionStorage.removeItem('image');
         }
         
         guessedWords.push([]);

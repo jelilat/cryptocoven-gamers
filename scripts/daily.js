@@ -25,6 +25,9 @@ module.exports.currentStat = async () => {
             const letterEl = document.getElementById(letterId);
             letterEl.classList.add("animate__flipInX");
             letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
+            const availableSpaceEl = document.getElementById(String(index + 1));
+
+            availableSpaceEl.textContent = letter;
 
             const keyboardLetter = document.querySelector(`[data-key="${letter}"]`);
             if (tileColor !== "rgb(181, 159, 59)") {

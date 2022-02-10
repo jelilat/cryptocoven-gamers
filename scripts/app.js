@@ -84740,6 +84740,7 @@ module.exports.currentStat = async () => {
     createSquares(witch);
 
     guessed = guessed.split(",");
+    console.log(guessed)
 
     const interval = 200;
 
@@ -84752,6 +84753,9 @@ module.exports.currentStat = async () => {
             const letterEl = document.getElementById(letterId);
             letterEl.classList.add("animate__flipInX");
             letterEl.style = `background-color:${tileColor};border-color:${tileColor}`;
+            const availableSpaceEl = document.getElementById(String(index + 1));
+
+            availableSpaceEl.textContent = letter;
 
             const keyboardLetter = document.querySelector(`[data-key="${letter}"]`);
             if (tileColor !== "rgb(181, 159, 59)") {
@@ -84828,7 +84832,7 @@ async function addToLeaderboard(id, url, name, score) {
   // //var faunadb = (window as any).faunadb;
   var q = faunadb.query
       const response = await client.query(
-          q.Create(q.collection("leaderboard"), {
+          q.Create(q.Collection("leaderboard"), {
                 data: {
                     tokenId: id,
                     pfp_url: url,
@@ -84885,7 +84889,7 @@ async function updateLeaderboard(id, newScore) {
     averageScore = ((score * games_played) + newScore) / (games_played + 1)
     const response = client.query(
         q.Update(
-            q.Ref(q.collection('leaderboard'), id),
+            q.Ref(q.Collection('leaderboard'), id),
             {
                 data: {
                     score: averageScore,
@@ -85148,6 +85152,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
           document.getElementById("show-modal").click();
+          sessionStorage.removeItem('witch');
+          sessionStorage.removeItem('image');
         } else if (guessedWords.length === 5) {
           let preResult = "witchle " + guessedWordCount +"/5 <br>";
 
@@ -85166,6 +85172,8 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("witch", name)
 
           document.getElementById("show-modal").click();
+          sessionStorage.removeItem('witch');
+          sessionStorage.removeItem('image');
         }
         
         guessedWords.push([]);
@@ -85226,27 +85234,39 @@ function chooseWitch() {
 }
 
 module.exports.witchDetails = async () =>{
-    let witch = await chooseWitch();
-    let response = await fetch(`https://api.opensea.io/api/v1/asset/0x5180db8f5c931aae63c74266b211f580155ecac8/${witch}`, 
-        {
-            method: 'GET',
-        })
+    let name;
+    let image;
+
+    if (sessionStorage.getItem("witch") === null) {
+        let witch = await chooseWitch();
+        let response = await fetch(`https://api.opensea.io/api/v1/asset/0x5180db8f5c931aae63c74266b211f580155ecac8/${witch}`, 
+            {
+                method: 'GET',
+            })
+        
+        let qualities = await response.json();
+        
+        image = qualities["image_url"];
+        localStorage.setItem("image", image);
+
+        let fullname = qualities["name"];
+        let nameList = fullname.split(" ");
+
+        if (nameList[0] == "the") {
+            name = nameList[1].replace(",", "");
+        } else {
+            name = nameList[0].replace(",", "")
+        }
+
+        sessionStorage.setItem("witch", name);
+        sessionStorage.setItem("image", image);
+    } else {
+        name = sessionStorage.getItem("witch");
+        image = sessionStorage.getItem("image");
+    }
     
-    let qualities = await response.json();
-    
-    let image = qualities["image_url"];
     let image_card = await document.getElementById("image-card")
     image_card.src = image;
-    localStorage.setItem("image", image);
-
-    let fullname = qualities["name"];
-    let nameList = fullname.split(" ");
-    let name;
-    if (nameList[0] == "the") {
-        name = nameList[1].replace(",", "");
-    } else {
-        name = nameList[0].replace(",", "")
-    }
 
     let board = document.getElementById("board");
     board.style.setProperty('grid-template-columns', 'repeat(' + name.length + ', 1fr)');
