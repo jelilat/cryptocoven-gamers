@@ -15,6 +15,7 @@ module.exports.witchDetails = async () =>{
     let image = qualities["image_url"];
     let image_card = await document.getElementById("image-card")
     image_card.src = image;
+    localStorage.setItem("image", image);
 
     let fullname = qualities["name"];
     let nameList = fullname.split(" ");

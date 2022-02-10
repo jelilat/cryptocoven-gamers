@@ -5,6 +5,7 @@ const detectEthereumProvider = require("@metamask/detect-provider");
 const database = require('./database.js')
 const { getTokenBalance } = require('./balance.js')
 const { witchDetails } = require('./witch.js')
+const { currentStat } = require('./daily.js')
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_ID));
 const contract = "0x5180db8F5c931aaE63c74266b211F580155ecac8";
@@ -13,6 +14,14 @@ const covenContract = new web3.eth.Contract(abi, contract);
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  let playTime = parseInt(localStorage.getItem("time"));
+  let currentTime = new Date().getTime();
+  
+  if (currentTime - playTime < 86400000) {
+    currentStat()
+    document.getElementById("show-modal").click();
+  } 
+  else {
     let name;
     let image;
     witch();
@@ -82,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
   }
 
-  
+
 
   let guessedWords = [[]];
   let availableSpace = 1;
@@ -187,14 +196,40 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           result = preResult + result + final + "<br>";
+          localStorage.setItem('result', result);
           
           document.getElementById("result").innerHTML = result;
-          document.getElementById("show-modal").click();
+          document.getElementById("m-title").value = "You won!";
+          localStorage.setItem('status', "You won!");
           localStorage.setItem('score', 1/guessedWordCount);
+          let time = new Date().getTime()
+          localStorage.setItem('time', time);
           // saveScore();
           document.getElementById("share").value = result;
+
+          localStorage.setItem('guessed', guessedWords)
+          localStorage.setItem("witch", name)
+
+
+          document.getElementById("show-modal").click();
         } else if (guessedWords.length === 5) {
-          window.alert(`Oops! Try again tomorrow`);
+          let preResult = "witchle " + guessedWordCount +"/5 <br>";
+
+          result = preResult + result + final + "<br>";
+          localStorage.setItem('result', result);
+          
+          document.getElementById("result").innerHTML = result;
+          document.getElementById("m-title").value = "Oops! Try again tomorrow";
+          localStorage.setItem('status', "Oops! Try again tomorrow");
+          let time = new Date().getTime()
+          localStorage.setItem('time', time);
+          // saveScore();
+          document.getElementById("share").value = result;
+
+          localStorage.setItem('guessed', guessedWords)
+          localStorage.setItem("witch", name)
+
+          document.getElementById("show-modal").click();
         }
         
         guessedWords.push([]);
@@ -242,6 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       updateGuessedWords(letter);
     };
+  }
   }
 
   
