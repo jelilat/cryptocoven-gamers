@@ -51,6 +51,9 @@
                         <script>
                           let playTime = parseInt(localStorage.getItem("time"));
                         let currentTime = new Date().getTime();
+                        if (playTime === null) {
+                          playTime = currentTime;
+                        }
                         let countdownDate = playTime + 86400000
 
                         var x = setInterval(function() {
