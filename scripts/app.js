@@ -84873,7 +84873,9 @@ document.addEventListener("DOMContentLoaded", () => {
           // url: "https://witchcraft.io",
         });
       } else {
-        navigator.clipboard.writeText(document.getElementById("share").value);
+        let data = document.getElementById("share").value
+        data = data.replace("<br>", "")
+        navigator.clipboard.writeText(data);
       }
     };
     
@@ -85121,7 +85123,7 @@ module.exports.witchDetails = async () =>{
 
     let board = document.getElementById("board");
     board.style.setProperty('grid-template-columns', 'repeat(' + name.length + ', 1fr)');
-    console.log(name)
+    
     return [name, image];
 }
 },{}],484:[function(require,module,exports){
