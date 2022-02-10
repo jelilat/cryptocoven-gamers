@@ -27,6 +27,6 @@ module.exports.witchDetails = async () =>{
 
     let board = document.getElementById("board");
     board.style.setProperty('grid-template-columns', 'repeat(' + name.length + ', 1fr)');
-    console.log(name)
+    
     return [name, image];
 }

@@ -26,31 +26,36 @@
     </head>
     <body>
         <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-2">
-                </div>
-                <div class="col-sm-8">
-                </div>
-                <div class="col-sm-2">
-                    <button id="connect-wallet">Connect Wallet</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="jumbotron" style="text-align:center;">
-                        <h2>Welcome to the Coven!</h2>
-                        <p>A witch is lost in the wilderness. Only you can help her find her way back.</p>
+            <div class="container">
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="show-modal"></button>
+                <script>
+                    $(document).ready(function(){
+                        $("#show-modal").hide()
+                    });
+                </script>
+                <!-- Modal -->
+                <div class="modal fade" id="myModal" role="dialog">
+                  <div class="modal-dialog">
+                  
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="text-align: center">You won!</h4>
+                      </div>
+                      <div class="modal-body" style="text-align: center">
+                        <p id="result"></p>
+                      </div>
+                      <div class="modal-footer" style="text-align: center">
+                        <button type="button" class="btn btn-default" id="share">Share</button>
+                      </div>
                     </div>
+                    
+                  </div>
                 </div>
-            </div>
-            <div style="text-align:center">
-                <h2>Rules of the Game</h2>
-                <h4>1. Summon a Witch to reveal her face</h4>
-                <h4>2. You will be given 5 chances to say her name.</h4>
-                <h4>3. If you say her name correctly, you will be rewarded.</h4>
-                <h4><strong>Anyone can summon a witch, but only those who say her name can take her home.</strong></h4>
-                <button id="summon">Summon a Witch</button>
-            </div>
+                
+              </div>
 
             <ul id="myUL">
             </ul>
@@ -88,9 +93,7 @@
                         </li>
                     </ul>
                 </div>
-                <div style="text-align:center;">
-                    <h2 id="home">Take her home!</h2>
-                </div>
+                
                   <div id="board-container">
                     <div id="board"></div>
                   </div>
@@ -136,9 +139,7 @@
                 </div>
               </div>
             <div>
-                <h2 style="text-align:center;">
-                    Leaderboard
-                </h2>
+                
                 <div id="projectTable" class="table-wrapper">
                     
                 </div>
