@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         guessedWordCount += 1;
 
         if (currentWord === name) {
-          let preResult = "witchle " + guessedWordCount +"/5 <br>";
+          let preResult = "witchle " + guessedWordCount +"/6 <br>";
           let final = "";
 
           for (let i = 0; i < name.length; i++) {
@@ -252,8 +252,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           location.reload();
           saveScore();
 
-        } else if (guessedWords.length === 5) {
-          let preResult = "witchle " + guessedWordCount +"/5 <br>";
+        } else if (guessedWords.length === 6) {
+          let preResult = "witchle " + guessedWordCount +"/6 <br>";
 
           result = preResult + result + final + "<br>";
           localStorage.setItem('result', result);
