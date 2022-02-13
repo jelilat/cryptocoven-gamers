@@ -79,7 +79,7 @@ function getTileColor(letter, index, name) {
 
   function createSquares(name) {
     const gameBoard = document.getElementById("board");
-    let cap = +name.length * 5
+    let cap = +name.length * 6
     let board = document.getElementById("board");
     board.style.setProperty('grid-template-columns', 'repeat(' + name.length + ', 1fr)');
     for (let index = 0; index < cap; index++) {

@@ -84806,7 +84806,7 @@ function getTileColor(letter, index, name) {
 
   function createSquares(name) {
     const gameBoard = document.getElementById("board");
-    let cap = +name.length * 5
+    let cap = +name.length * 6
     let board = document.getElementById("board");
     board.style.setProperty('grid-template-columns', 'repeat(' + name.length + ', 1fr)');
     for (let index = 0; index < cap; index++) {
@@ -84823,7 +84823,6 @@ function getTileColor(letter, index, name) {
 const faunadb = require('faunadb');
 require('dotenv').config();
 
-
 async function addToLeaderboard(id, url, name, score) {
   var client = new faunadb.Client({
       secret: process.env.FAUNA_KEY
@@ -84839,6 +84838,7 @@ async function addToLeaderboard(id, url, name, score) {
                     name: name,
                     score: score,
                     games_played: 1,
+                    status: "true",
                 },
           })
       )
@@ -84853,9 +84853,10 @@ async function getLeaderboard() {
   // //var faunadb = (window as any).faunadb;
   var q = faunadb.query
     const response = await client.query(
-        q.Paginate(q.Match(q.Index('leaderboard_by_score')))
+        q.Paginate(q.Match(q.Index('leaderboard'), "true")
+        )
     )
-    console.log(response)
+      console.log(response)
     return response
   }
 
@@ -84914,7 +84915,6 @@ function constructTable(data) {
        '</thead>' +
        '<tbody>' +
            '<tr>';
-           console.log(data['data'][0][0])
   for(let i = 0; i < data['data'].length; i++) {
       table += '<td>' + data['data'][i][0] + '</td>';
       table += '<td>' + `<img src="${data['data'][i][1]}" alt="Witch" class="leaderboard-image">` + '</td>';
@@ -84938,13 +84938,12 @@ module.exports = {
 }).call(this)}).call(this,require('_process'))
 },{"_process":659,"dotenv":207,"faunadb":253}],483:[function(require,module,exports){
 (function (process){(function (){
-const faunadb = require('faunadb');
 const Web3 = require('web3');
 require('dotenv').config();
 const detectEthereumProvider = require("@metamask/detect-provider");
 const database = require('./database.js')
 const { getTokenBalance } = require('./balance.js')
-const { witchDetails } = require('./witch.js')
+const { witchDetails, setCookie } = require('./witch.js')
 const { currentStat } = require('./daily.js')
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_ID));
@@ -84952,7 +84951,15 @@ const contract = "0x5180db8F5c931aaE63c74266b211F580155ecac8";
 const abi = [{"inputs":[{"internalType":"address","name":"_openSeaProxyRegistryAddress","type":"address"},{"internalType":"uint256","name":"_maxWitches","type":"uint256"},{"internalType":"uint256","name":"_maxCommunitySaleWitches","type":"uint256"},{"internalType":"uint256","name":"_maxGiftedWitches","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"approved","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":false,"internalType":"bool","name":"approved","type":"bool"}],"name":"ApprovalForAll","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":true,"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[],"name":"COMMUNITY_SALE_PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MAX_WITCHES_PER_WALLET","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PUBLIC_SALE_PRICE","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"approve","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32[]","name":"merkleProof","type":"bytes32[]"}],"name":"claim","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimListMerkleRoot","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"claimed","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"communityMintCounts","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"communitySaleMerkleRoot","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"getApproved","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getBaseURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLastTokenId","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"addresses","type":"address[]"}],"name":"giftWitches","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"operator","type":"address"}],"name":"isApprovedForAll","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isCommunitySaleActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"isPublicSaleActive","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxCommunitySaleWitches","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxGiftedWitches","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"maxWitches","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"numberOfTokens","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint8","name":"numberOfTokens","type":"uint8"},{"internalType":"bytes32[]","name":"merkleProof","type":"bytes32[]"}],"name":"mintCommunitySale","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"numGiftedWitches","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"ownerOf","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"numToReserve","type":"uint256"}],"name":"reserveForGifting","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address[]","name":"addresses","type":"address[]"}],"name":"rollOverWitches","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"uint256","name":"salePrice","type":"uint256"}],"name":"royaltyInfo","outputs":[{"internalType":"address","name":"receiver","type":"address"},{"internalType":"uint256","name":"royaltyAmount","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"},{"internalType":"bytes","name":"_data","type":"bytes"}],"name":"safeTransferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"operator","type":"address"},{"internalType":"bool","name":"approved","type":"bool"}],"name":"setApprovalForAll","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_baseURI","type":"string"}],"name":"setBaseURI","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"merkleRoot","type":"bytes32"}],"name":"setClaimListMerkleRoot","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"merkleRoot","type":"bytes32"}],"name":"setCommunityListMerkleRoot","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_isCommunitySaleActive","type":"bool"}],"name":"setIsCommunitySaleActive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_isOpenSeaProxyActive","type":"bool"}],"name":"setIsOpenSeaProxyActive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bool","name":"_isPublicSaleActive","type":"bool"}],"name":"setIsPublicSaleActive","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_verificationHash","type":"string"}],"name":"setVerificationHash","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes4","name":"interfaceId","type":"bytes4"}],"name":"supportsInterface","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"tokenURI","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"tokenId","type":"uint256"}],"name":"transferFrom","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"verificationHash","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"contract IERC20","name":"token","type":"address"}],"name":"withdrawTokens","outputs":[],"stateMutability":"nonpayable","type":"function"}]
 const covenContract = new web3.eth.Contract(abi, contract);
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await database.getLeaderboard()
+  .then(function(result) {
+    let table = database.constructTable(result);
+    document.getElementById("leaderboard").innerHTML = table;
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
 
   let playTime = parseInt(localStorage.getItem("time"));
   let currentTime = new Date().getTime();
@@ -85016,13 +85023,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function witch() {
-    // await database.getLeaderboard()
-    // .then(function(result) {
-    //   database.constructTable(result);
-    // })
-    // .catch(function(err) {
-    //   console.log(err);
-    // });
+    await database.getLeaderboard()
+    .then(function(result) {
+      database.constructTable(result);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
 
     const details = await witchDetails();
     name = details[0];
@@ -85150,10 +85157,10 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem('guessed', guessedWords)
           localStorage.setItem("witch", name)
 
-
-          document.getElementById("show-modal").click();
-          sessionStorage.removeItem('witch');
-          sessionStorage.removeItem('image');
+          setCookie('witch', "");
+          setCookie('image', "");
+          location.reload();
+          
         } else if (guessedWords.length === 5) {
           let preResult = "witchle " + guessedWordCount +"/5 <br>";
 
@@ -85171,9 +85178,9 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem('guessed', guessedWords)
           localStorage.setItem("witch", name)
 
-          document.getElementById("show-modal").click();
-          sessionStorage.removeItem('witch');
-          sessionStorage.removeItem('image');
+          setCookie('witch', "");
+          setCookie('image', "");
+          location.reload();
         }
         
         guessedWords.push([]);
@@ -85182,7 +85189,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createSquares(name) {
     const gameBoard = document.getElementById("board");
-    let cap = +name.length * 5
+    let cap = +name.length * 6
     
     for (let index = 0; index < cap; index++) {
       let square = document.createElement("div");
@@ -85227,17 +85234,41 @@ document.addEventListener("DOMContentLoaded", () => {
   
   });
 }).call(this)}).call(this,require('_process'))
-},{"./balance.js":480,"./daily.js":481,"./database.js":482,"./witch.js":484,"@metamask/detect-provider":108,"_process":659,"dotenv":207,"faunadb":253,"web3":463}],484:[function(require,module,exports){
+},{"./balance.js":480,"./daily.js":481,"./database.js":482,"./witch.js":484,"@metamask/detect-provider":108,"_process":659,"dotenv":207,"web3":463}],484:[function(require,module,exports){
 function chooseWitch() {
     let number = Math.floor(Math.random() * (9757)) + 1;
     return number;
 }
 
-module.exports.witchDetails = async () =>{
+function setCookie(cname, cvalue) {
+    let currentTime = new Date().getTime();
+    let expirationTime = currentTime + (60 * 60 * 24 * 1000);
+    let expirationDate = new Date(expirationTime);
+    document.cookie = cname + "=" + cvalue + "; expires=" + expirationDate.toUTCString() + "; path=/";
+}
+
+function getCookie(cname) {
+    let name = cname + "="
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i]
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1)
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length)
+        }
+    }
+    return ""
+}
+
+const witchDetails = async () =>{
     let name;
     let image;
 
-    if (sessionStorage.getItem("witch") === null) {
+    if (getCookie("witch") === "") {
         let witch = await chooseWitch();
         let response = await fetch(`https://api.opensea.io/api/v1/asset/0x5180db8f5c931aae63c74266b211f580155ecac8/${witch}`, 
             {
@@ -85258,11 +85289,11 @@ module.exports.witchDetails = async () =>{
             name = nameList[0].replace(",", "")
         }
 
-        sessionStorage.setItem("witch", name);
-        sessionStorage.setItem("image", image);
+        setCookie("witch", name);
+        setCookie("image", image);
     } else {
-        name = sessionStorage.getItem("witch");
-        image = sessionStorage.getItem("image");
+        name = getCookie("witch");
+        image = getCookie("image");
     }
     
     let image_card = await document.getElementById("image-card")
@@ -85272,6 +85303,11 @@ module.exports.witchDetails = async () =>{
     board.style.setProperty('grid-template-columns', 'repeat(' + name.length + ', 1fr)');
     
     return [name, image];
+}
+
+module.exports = {
+    setCookie,
+    witchDetails,
 }
 },{}],485:[function(require,module,exports){
 

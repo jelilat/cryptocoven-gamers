@@ -1,7 +1,6 @@
 const faunadb = require('faunadb');
 require('dotenv').config();
 
-
 async function addToLeaderboard(id, url, name, score) {
   var client = new faunadb.Client({
       secret: process.env.FAUNA_KEY
@@ -17,6 +16,7 @@ async function addToLeaderboard(id, url, name, score) {
                     name: name,
                     score: score,
                     games_played: 1,
+                    status: "true",
                 },
           })
       )
@@ -31,9 +31,10 @@ async function getLeaderboard() {
   // //var faunadb = (window as any).faunadb;
   var q = faunadb.query
     const response = await client.query(
-        q.Paginate(q.Match(q.Index('leaderboard_by_score')))
+        q.Paginate(q.Match(q.Index('leaderboard'), "true")
+        )
     )
-    console.log(response)
+      console.log(response)
     return response
   }
 
@@ -92,7 +93,6 @@ function constructTable(data) {
        '</thead>' +
        '<tbody>' +
            '<tr>';
-           console.log(data['data'][0][0])
   for(let i = 0; i < data['data'].length; i++) {
       table += '<td>' + data['data'][i][0] + '</td>';
       table += '<td>' + `<img src="${data['data'][i][1]}" alt="Witch" class="leaderboard-image">` + '</td>';

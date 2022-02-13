@@ -50,32 +50,35 @@
                         <p id="timer"></p>
                         <script>
                           let playTime = parseInt(localStorage.getItem("time"));
-                        let currentTime = new Date().getTime();
-                        if (playTime === null) {
-                          playTime = currentTime;
-                        }
-                        let countdownDate = playTime + 86400000
-
-                        var x = setInterval(function() {
-
-                          var distance = countdownDate - currentTime
-                          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                            
-                          // Output the result in an element with id="demo"
-                          document.getElementById("timer").innerHTML = hours + "h "
-                          + minutes + "m " + seconds + "s ";
-                          
-                        // If the count down is over, write some text 
-                          if (distance < 0) {
-                            clearInterval(x);
+                          let currentTime = new Date().getTime();
+                          if (playTime === null) {
+                            playTime = currentTime;
                           }
-                        }, 1000);
+                          let countdownDate = playTime + 86400000
+
+                          var x = setInterval(function() {
+
+                            var distance = countdownDate - currentTime
+                            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                              
+                            // Output the result in an element with id="demo"
+                            document.getElementById("timer").innerHTML = hours + "h "
+                            + minutes + "m " + seconds + "s ";
+                            
+                          // If the count down is over, write some text 
+                            if (distance < 0) {
+                              clearInterval(x);
+                            }
+                          }, 1000);
                         </script>
+                        <button type="button" class="btn btn-default" id="share">Share</button>
                       </div>
                       <div class="modal-footer" style="text-align: center">
-                        <button type="button" class="btn btn-default" id="share">Share</button>
+                        <p style="text-align: center;">Connect your wallet to join the Leaderboard</p>
+                        <p style="text-align: center;"><strong>PS: Only witch holders can join the leaderboard</strong></p>
+                        <button id="join-leaderboard">Join Leaderboard</button>
                       </div>
                     </div>
                     
@@ -114,12 +117,12 @@
                 <div id="game">
                     <div id="board-container">
 
-                    <ul class="deck">
-                        <li class="card" id="cards">
-                            <img src="#" alt="Witch" id="image-card">
-                        </li>
-                    </ul>
-                </div>
+                      <ul class="deck">
+                          <li class="card" id="cards">
+                              <img src="#" alt="Witch" id="image-card">
+                          </li>
+                      </ul>
+                    </div>
                 
                   <div id="board-container">
                     <div id="board"></div>
@@ -166,8 +169,8 @@
                 </div>
               </div>
             <div>
-                
-                <div id="projectTable" class="table-wrapper">
+              <h3 style="text-align: center;">Leaderboard</h3>
+                <div id="leaderboard" class="table-wrapper">
                     
                 </div>
             </div>
