@@ -2,9 +2,11 @@
   "name": "cryptocoven-gamers",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "parcel index.html",
+    "build": "parcel build index.html",
+    "serve": "serve -s dist/"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +20,8 @@
     "uniq": "^1.0.1",
     "walletconnect": "^1.7.1",
     "web3": "^1.7.0"
+  },
+  "devDependencies": {
+    "parcel": "^2.3.1"
   }
 }
