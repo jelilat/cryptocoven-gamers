@@ -5,7 +5,7 @@ const detectEthereumProvider = require("@metamask/detect-provider");
 const { providers, ethers } = require('ethers')
 const database = require('./database.js')
 const { getTokenBalance } = require('./balance.js')
-const { witchDetails, setCookie } = require('./witch.js')
+const { witchDetails, setCookie, getCookie } = require('./witch.js')
 const { currentStat } = require('./daily.js')
 
 const web3 = new Web3(new Web3.providers.HttpProvider(process.env.INFURA_ID));
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updateGuessedWords(letter) {
     const currentWordArr = getCurrentWordArr();
 
-    if (currentWordArr && currentWordArr.length < name.length + 1) {
+    if (currentWordArr && currentWordArr.length < name.length) {
       currentWordArr.push(letter);
 
       const availableSpaceEl = document.getElementById(String(availableSpace));
@@ -230,6 +230,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         guessedWordCount += 1;
         guessedWords.push([]);
+        localStorage.setItem('guessed', guessedWords)
         
         if (currentWord === name) {
           let preResult = "witchle " + guessedWordCount +"/6 ";
@@ -303,6 +304,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function handleDeleteLetter() {
     const currentWordArr = getCurrentWordArr();
+   if ((name.length *6) % guessedWords.length != 0) {
     const removedLetter = currentWordArr.pop();
 
     guessedWords[guessedWords.length - 1] = currentWordArr;
@@ -311,6 +313,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     lastLetterEl.textContent = "";
     availableSpace = availableSpace - 1;
+   }
   }
 
   for (let i = 0; i < keys.length; i++) {

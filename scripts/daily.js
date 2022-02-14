@@ -1,6 +1,6 @@
 module.exports.currentStat = async () => {
     let guessed = localStorage.getItem("guessed");
-    let witch = localStorage.getItem("witch");
+    let witch = getCookie("witch");
 
     createSquares(witch);
     let image = localStorage.getItem("image");

@@ -71,4 +71,5 @@ const witchDetails = async () =>{
 module.exports = {
     setCookie,
     witchDetails,
+    getCookie,
 }
