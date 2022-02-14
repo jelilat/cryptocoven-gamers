@@ -38,22 +38,22 @@ document.addEventListener("DOMContentLoaded", async () => {
     // const leaderboard = document.getElementById("join-leaderboard")
     // leaderboard.onclick = saveScore;
     
-    document.getElementById("share").onclick = () => {
-      console.log("got here")
-      if (navigator.share) {
-        let result = localStorage.getItem
-        navigator.share({
-          text: result
-          // title: "I just got a score of " + score + " in Witchcraft!",
-          // text: "I just got a score of " + score + " in Witchcraft! Can you beat me?",
-          // url: "https://witchcraft.io",
-        });
-      } else {
-        let data = document.getElementById("share").value
-        data = data.replace("<br>", "")
-        navigator.clipboard.writeText(data);
-      }
-    };
+    // document.getElementById("share").onclick = () => {
+    //   console.log("got here")
+    //   if (navigator.share) {
+    //     let result = localStorage.getItem
+    //     navigator.share({
+    //       text: result
+    //       // title: "I just got a score of " + score + " in Witchcraft!",
+    //       // text: "I just got a score of " + score + " in Witchcraft! Can you beat me?",
+    //       // url: "https://witchcraft.io",
+    //     });
+    //   } else {
+    //     let data = document.getElementById("share").value
+    //     data = data.replace("<br>", "")
+    //     navigator.clipboard.writeText(data);
+    //   }
+    // };
     
     async function connectWallet() {
       const ethereumProvider = await detectEthereumProvider();
@@ -141,6 +141,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const correctLetter = "🟨";
   const incorrectLetter = "⬛";
   let result = "";
+  let result2 = "";
 
   const keys = document.querySelectorAll(".keyboard-row button");
 
@@ -203,7 +204,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.alert(`Word must be ${name.length} letters`);
     } else {
         const currentWord = currentWordArr.join("");
-        result += " ";
+        result += " <br>";
+        result2 += " ";
 
         const firstLetterId = guessedWordCount * name.length + 1;
         const interval = 200;
@@ -212,6 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const tileColor = getTileColor(letter, index);
             const tileColorText = getTileColorText(letter, index);
             result += tileColorText;
+            result2 += tileColorText;
 
             const letterId = firstLetterId + index;
             const letterEl = document.getElementById(letterId);
@@ -226,18 +229,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
 
         guessedWordCount += 1;
-
+        guessedWords.push([]);
+        
         if (currentWord === name) {
           let preResult = "witchle " + guessedWordCount +"/6 ";
-          let final = "";
+          let preResult2 = "witchle " + guessedWordCount +"/6 ";
 
           for (let i = 0; i < name.length; i++) {
             final += correctPosition;
           }
 
           result = preResult + result + final + " ";
-          localStorage.setItem('result', result);
-          result = result.replace(' ',"<br>")
+
+          result = preResult + result + final + "<br>";
+          result2 = preResult2 + result2 + final + " ";
+          localStorage.setItem('result', result2);
+          
           document.getElementById("result").innerHTML = result;
           document.getElementById("m-title").value = "You won!";
           localStorage.setItem('status', "You won!");
@@ -254,12 +261,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           location.reload();
           // saveScore();
 
-        } else if (guessedWords.length === 6) {
-          let preResult = "witchle " + guessedWordCount +"/6 ";
+        } else if (guessedWords.length === 7) {
+          let preResult = "witchle " + guessedWordCount +"/6 <br>";
+          let preResult2 = "witchle " + guessedWordCount +"/6 ";
 
-          result = preResult + result + final + " ";
-          localStorage.setItem('result', result);
-          result = result.replace(' ',"<br>")
+          result = preResult + result + "<br>";
+          result2 = preResult2 + result2 + " ";
+          localStorage.setItem('result', result2);
           
           document.getElementById("result").innerHTML = result;
           document.getElementById("m-title").value = "Oops! Try again tomorrow";
@@ -277,8 +285,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           location.reload();
           // saveScore();
         }
-        
-        guessedWords.push([]);
     }
   }
 
