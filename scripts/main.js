@@ -39,7 +39,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     // leaderboard.onclick = saveScore;
     
     document.getElementById("share").onclick = () => {
+      console.log("got here")
       if (navigator.share) {
+        let result = localStorage.getItem
         navigator.share({
           text: result
           // title: "I just got a score of " + score + " in Witchcraft!",
@@ -201,7 +203,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       window.alert(`Word must be ${name.length} letters`);
     } else {
         const currentWord = currentWordArr.join("");
-        result += "<br>";
+        result += " ";
 
         const firstLetterId = guessedWordCount * name.length + 1;
         const interval = 200;
@@ -226,16 +228,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         guessedWordCount += 1;
 
         if (currentWord === name) {
-          let preResult = "witchle " + guessedWordCount +"/6 <br>";
+          let preResult = "witchle " + guessedWordCount +"/6 ";
           let final = "";
 
           for (let i = 0; i < name.length; i++) {
             final += correctPosition;
           }
 
-          result = preResult + result + final + "<br>";
+          result = preResult + result + final + " ";
           localStorage.setItem('result', result);
-          
+          result = result.replace(' ',"<br>")
           document.getElementById("result").innerHTML = result;
           document.getElementById("m-title").value = "You won!";
           localStorage.setItem('status', "You won!");
@@ -253,10 +255,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           // saveScore();
 
         } else if (guessedWords.length === 6) {
-          let preResult = "witchle " + guessedWordCount +"/6 <br>";
+          let preResult = "witchle " + guessedWordCount +"/6 ";
 
-          result = preResult + result + final + "<br>";
+          result = preResult + result + final + " ";
           localStorage.setItem('result', result);
+          result = result.replace(' ',"<br>")
           
           document.getElementById("result").innerHTML = result;
           document.getElementById("m-title").value = "Oops! Try again tomorrow";

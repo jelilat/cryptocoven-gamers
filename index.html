@@ -73,13 +73,32 @@
                             }
                           }, 1000);
                         </script>
-                        <button type="button" class="btn btn-default" id="share">Share</button>
                       </div>
-                      <!--<div class="modal-footer" style="text-align: center">
-                        <p style="text-align: center;">Connect your wallet to join the Leaderboard</p>
+                      <div class="modal-footer" style="text-align: center">
+                        <button type="button" class="btn btn-default" id="share">Share</button>
+                        <!--<p style="text-align: center;">Connect your wallet to join the Leaderboard</p>
                         <p style="text-align: center;"><strong>PS: Only witch holders can join the leaderboard</strong></p>
-                        <button id="join-leaderboard">Join Leaderboard</button>
-                      </div>-->
+                        <button id="join-leaderboard">Join Leaderboard</button>-->
+                        <script>
+                          $('#share').click(function() {
+                            let result = localStorage.getItem("result")
+                              if (navigator.share) {
+                                console.log("got heres")
+                                navigator.share({
+                                  text: result
+                                  // title: "I just got a score of " + score + " in Witchcraft!",
+                                  // text: "I just got a score of " + score + " in Witchcraft! Can you beat me?",
+                                  // url: "https://witchcraft.io",
+                                });
+                              } else {
+                                console.log("got here")
+                                let data = localStorage.getItem("result")
+                                
+                                navigator.clipboard.writeText(data);
+                              }
+                          });
+                        </script>
+                      </div>
                     </div>
                     
                   </div>
