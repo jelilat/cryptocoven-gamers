@@ -1,7 +1,7 @@
 const Web3 = require('web3');
 require('dotenv').config();
 const detectEthereumProvider = require("@metamask/detect-provider");
-const Walletconnect = require('walletconnect');
+// const Walletconnect = require('walletconnect');
 const { providers, ethers } = require('ethers')
 const database = require('./database.js')
 const { getTokenBalance } = require('./balance.js')
@@ -14,14 +14,14 @@ const abi = [{"inputs":[{"internalType":"address","name":"_openSeaProxyRegistryA
 const covenContract = new web3.eth.Contract(abi, contract);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await database.getLeaderboard()
-  .then(function(result) {
-    let table = database.constructTable(result);
-    document.getElementById("leaderboard").innerHTML = table;
-  })
-  .catch(function(err) {
-    console.log(err);
-  });
+  // await database.getLeaderboard()
+  // .then(function(result) {
+  //   let table = database.constructTable(result);
+  //   document.getElementById("leaderboard").innerHTML = table;
+  // })
+  // .catch(function(err) {
+  //   console.log(err);
+  // });
 
   let playTime = parseInt(localStorage.getItem("time"));
   let currentTime = new Date().getTime();
@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     let image;
     witch();
       
-    const leaderboard = document.getElementById("join-leaderboard")
-    leaderboard.onclick = saveScore;
+    // const leaderboard = document.getElementById("join-leaderboard")
+    // leaderboard.onclick = saveScore;
     
     document.getElementById("share").onclick = () => {
       if (navigator.share) {
@@ -114,13 +114,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function witch() {
-    await database.getLeaderboard()
-    .then(function(result) {
-      database.constructTable(result);
-    })
-    .catch(function(err) {
-      console.log(err);
-    });
+    // await database.getLeaderboard()
+    // .then(function(result) {
+    //   database.constructTable(result);
+    // })
+    // .catch(function(err) {
+    //   console.log(err);
+    // });
 
     const details = await witchDetails();
     name = details[0];
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           setCookie('witch', "");
           setCookie('image', "");
           location.reload();
-          saveScore();
+          // saveScore();
 
         } else if (guessedWords.length === 6) {
           let preResult = "witchle " + guessedWordCount +"/6 <br>";
@@ -272,7 +272,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           setCookie('witch', "");
           setCookie('image', "");
           location.reload();
-          saveScore();
+          // saveScore();
         }
         
         guessedWords.push([]);
