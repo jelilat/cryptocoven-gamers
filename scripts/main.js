@@ -145,6 +145,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const keys = document.querySelectorAll(".keyboard-row button");
 
+  // if(localStorage.getItem("stat") === "active") {
+  //   guessedWords = localStorage.getItem("guessed");
+  //   guessedWordCount = guessedWords.length - 1;
+  //   result = localStorage.getItem("result");
+  //   result2 = localStorage.getItem("result2");
+  //   currentStat()
+  // }
 
   function getCurrentWordArr() {
     const numberOfGuessedWords = guessedWords.length;
@@ -230,7 +237,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         guessedWordCount += 1;
         guessedWords.push([]);
-        localStorage.setItem('guessed', guessedWords)
+        localStorage.setItem('guessed', JSON.stringify(guessedWords))
+        localStorage.setItem('guessedWords', guessedWords)
+        localStorage.setItem('result', result)
+        localStorage.setItem('result2', result2)
         
         if (currentWord === name) {
           let preResult = "witchle " + guessedWordCount +"/6 ";
@@ -254,11 +264,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           localStorage.setItem('time', time);
           document.getElementById("share").value = result;
 
-          localStorage.setItem('guessed', guessedWords)
+          localStorage.setItem('guessed', JSON.stringify(guessedWords));
           localStorage.setItem("witch", name)
 
           setCookie('witch', "");
           setCookie('image', "");
+          localStorage.setItem("stat", "")
           location.reload();
           // saveScore();
 
@@ -278,11 +289,12 @@ document.addEventListener("DOMContentLoaded", async () => {
          
           document.getElementById("share").value = result;
 
-          localStorage.setItem('guessed', guessedWords)
+          localStorage.setItem('guessed', JSON.stringify(guessedWords))
           localStorage.setItem("witch", name)
 
           setCookie('witch', "");
           setCookie('image', "");
+          localStorage.setItem("stat", "")
           location.reload();
           // saveScore();
         }
@@ -304,16 +316,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function handleDeleteLetter() {
     const currentWordArr = getCurrentWordArr();
-   if ((name.length *6) % guessedWords.length != 0) {
-    const removedLetter = currentWordArr.pop();
+    if (currentWordArr.length !== 0) {
+      const removedLetter = currentWordArr.pop();
 
-    guessedWords[guessedWords.length - 1] = currentWordArr;
-
-    const lastLetterEl = document.getElementById(String(availableSpace - 1));
-
-    lastLetterEl.textContent = "";
-    availableSpace = availableSpace - 1;
-   }
+      guessedWords[guessedWords.length - 1] = currentWordArr;
+  
+      const lastLetterEl = document.getElementById(String(availableSpace - 1));
+  
+      lastLetterEl.textContent = "";
+      availableSpace = availableSpace - 1;
+    }
+   
   }
 
   for (let i = 0; i < keys.length; i++) {
@@ -322,6 +335,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (letter === "enter") {
         handleSubmitWord();
+        localStorage.setItem("status", "active")
         return;
       }
 

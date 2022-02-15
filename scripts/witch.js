@@ -48,8 +48,10 @@ const witchDetails = async () =>{
 
         if (nameList[0] == "the") {
             name = nameList[1].replace(",", "");
+            name = name.replace("-", "")
         } else {
             name = nameList[0].replace(",", "")
+            name = name.replace("-", "")
         }
 
         setCookie("witch", name);

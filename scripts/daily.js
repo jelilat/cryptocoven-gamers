@@ -1,5 +1,5 @@
 module.exports.currentStat = async () => {
-    let guessed = localStorage.getItem("guessed");
+    let guessed = localStorage.getItem("guessedWords");
     let witch = getCookie("witch");
 
     createSquares(witch);
